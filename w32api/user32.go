@@ -1,5 +1,4 @@
-// skipping golint for this file
-// Code generated  DO NOT EDIT.
+// Code generated to call native win32. DO NOT EDIT.
 
 package w32api
 
