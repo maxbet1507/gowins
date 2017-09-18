@@ -9,12 +9,16 @@ func main() {
 	nonClientMetrics, _ := NonClientMetrics.Get()
 
 	d := declarative.Dialog{
-		Font:   nonClientMetrics.Message.Font,
-		Layout: declarative.VBox{},
+		Font:      nonClientMetrics.Message.Font,
+		FixedSize: true,
+		Layout:    declarative.VBox{},
 		Children: []declarative.Widget{
 			declarative.Label{Text: "File"},
 			declarative.Label{Text: "ファイル"},
+			declarative.LineEdit{},
+			declarative.PushButton{Text: "OK"},
 		},
+		Title: "サンプル",
 	}
 	d.Run(nil)
 }
