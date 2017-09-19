@@ -6,13 +6,13 @@ import (
 	"github.com/maxbet1507/gowins/w32api"
 )
 
-func Check(name string) (bool, func()) {
+func Check(name string) (error, func()) {
 	sd := w32api.SECURITY_DESCRIPTOR{}
 	if r, err := w32api.InitializeSecurityDescriptor(&sd, w32api.SECURITY_DESCRIPTOR_REVISION); !r {
-		panic(err)
+		return err, func() {}
 	}
 	if r, err := w32api.SetSecurityDescriptorDacl(&sd, true, nil, false); !r {
-		panic(err)
+		return err, func() {}
 	}
 
 	sa := w32api.SECURITY_ATTRIBUTES{}
@@ -22,13 +22,14 @@ func Check(name string) (bool, func()) {
 
 	handle, err := w32api.CreateMutex(&sa, false, name)
 	if handle == uintptr(0) {
-		panic(err)
+		return err, func() {}
 	}
 
-	closer := func() {
+	if w32api.ErrorCode(err) == w32api.ERROR_SUCCESS {
+		err = nil
+	}
+
+	return err, func() {
 		w32api.CloseHandle(handle)
 	}
-
-	ret := w32api.ErrorCode(err) == w32api.ERROR_SUCCESS
-	return ret, closer
 }

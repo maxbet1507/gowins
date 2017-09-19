@@ -8,11 +8,12 @@ import (
 )
 
 func main() {
-	sia, stop := SingleInstanceApplication.Check("test")
+	err, stop := SingleInstanceApplication.Check("test")
 	defer stop()
 
-	fmt.Println(sia)
-	if sia {
+	fmt.Println(err)
+
+	if err == nil {
 		time.Sleep(10 * time.Second)
 	}
 }

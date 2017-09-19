@@ -1,7 +1,6 @@
 package NonClientMetrics
 
 import (
-	"fmt"
 	"math"
 	"syscall"
 	"unsafe"
@@ -59,8 +58,8 @@ func Get() (*NonClientMetrics, error) {
 	nonClientMetrics := w32api.NONCLIENTMETRICS{}
 	nonClientMetrics.Size = uint32(unsafe.Sizeof(nonClientMetrics))
 
-	if !w32api.SystemParametersInfo(w32api.SPI_GETNONCLIENTMETRICS, nonClientMetrics.Size, &nonClientMetrics, 0) {
-		return nil, fmt.Errorf("failed to call SystemParametersInfo")
+	if r, err := w32api.SystemParametersInfo(w32api.SPI_GETNONCLIENTMETRICS, nonClientMetrics.Size, &nonClientMetrics, 0); !r {
+		return nil, err
 	}
 
 	logPixcelsY := logPixcelsY()
@@ -98,9 +97,11 @@ func Get() (*NonClientMetrics, error) {
 }
 
 func logPixcelsY() int32 {
-	hdc := w32api.GetDC(0)
+	hdc, _ := w32api.GetDC(0)
 	defer w32api.ReleaseDC(0, hdc)
-	return w32api.GetDeviceCaps(hdc, w32api.LOGPIXELSY)
+
+	ret, _ := w32api.GetDeviceCaps(hdc, w32api.LOGPIXELSY)
+	return ret
 }
 
 func convertLogFontToWalkDeclarative(lf w32api.LOGFONT, logPixcelsY int32) declarative.Font {
