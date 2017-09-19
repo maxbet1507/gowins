@@ -12,7 +12,7 @@ var (
 	procGetDeviceCaps = gdi32.NewProc("GetDeviceCaps")
 )
 
-func GetDeviceCaps(hdc uintptr, nIndex int32) int32 {
-	ret, _, _ := procGetDeviceCaps.Call(hdc, uintptr(nIndex))
-	return int32(ret)
+func GetDeviceCaps(hdc uintptr, nIndex int32) (int32, error) {
+	ret, _, err := procGetDeviceCaps.Call(hdc, uintptr(nIndex))
+	return int32(ret), err
 }
