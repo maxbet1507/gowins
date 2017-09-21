@@ -11,6 +11,12 @@ golang for windows
 > たしか変更された際にはWndProcとかで通知されるはず。
 
 
-# SingleInstanceApplication
+## SingleInstanceApplication
 
 多重起動チェック用で、内部でCreateMutexを使用。
+
+
+## WindowExStyle
+
+コントロールがウィンドウ全体を使う場合だとエッジで見栄えが悪くなるので、
+ClientEdgeはWS_EX_CLIENTEDGEの有効無効を設定できるようにしています。
