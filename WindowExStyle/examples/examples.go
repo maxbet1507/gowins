@@ -8,6 +8,7 @@ import (
 
 func main() {
 	var le *walk.LineEdit
+	f := true
 
 	d := declarative.Dialog{
 		FixedSize: true,
@@ -17,7 +18,8 @@ func main() {
 			declarative.Label{Text: "ファイル"},
 			declarative.LineEdit{AssignTo: &le},
 			declarative.PushButton{Text: "OK", OnClicked: func() {
-				WindowExStyle.ClientEdge(le.Handle(), false)
+				f = !f
+				WindowExStyle.ClientEdge(uintptr(le.Handle()), f)
 			}},
 		},
 		Title: "サンプル",
