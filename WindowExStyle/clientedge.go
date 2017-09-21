@@ -1,16 +1,15 @@
 package WindowExStyle
 
 import (
-	"github.com/lxn/win"
+	"github.com/maxbet1507/gowins/w32api"
 )
 
-func ClientEdge(hwnd win.HWND, enable bool) {
-	exstyle := win.GetWindowLong(hwnd, win.GWL_EXSTYLE)
+func ClientEdge(hwnd uintptr, enable bool) {
+	exstyle, _ := w32api.GetWindowLongPtr(hwnd, w32api.GWL_EXSTYLE)
 	if enable {
-		exstyle |= win.WS_EX_CLIENTEDGE
+		w32api.SetWindowLongPtr(hwnd, w32api.GWL_EXSTYLE, uintptr(int32(exstyle)|w32api.WS_EX_CLIENTEDGE))
 	} else {
-		exstyle &= ^win.WS_EX_CLIENTEDGE
+		w32api.SetWindowLongPtr(hwnd, w32api.GWL_EXSTYLE, uintptr(int32(exstyle) & ^w32api.WS_EX_CLIENTEDGE))
 	}
-	win.SetWindowLong(hwnd, win.GWL_EXSTYLE, exstyle)
-	win.SetWindowPos(hwnd, 0, 0, 0, 0, 0, win.SWP_NOMOVE|win.SWP_NOSIZE|win.SWP_NOZORDER|win.SWP_FRAMECHANGED)
+	w32api.SetWindowPos(hwnd, 0, 0, 0, 0, 0, w32api.SWP_NOMOVE|w32api.SWP_NOSIZE|w32api.SWP_NOZORDER|w32api.SWP_FRAMECHANGED)
 }
